@@ -1,0 +1,48 @@
+---
+
+# install Java
+- name: Add JRE ppa
+  apt_repository: repo=ppa:webupd8team/java state=present
+
+- name: Automatically select the Oracle License
+  shell: echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+
+- name: Install JRE
+  apt: pkg=oracle-java7-installer state=latest update-cache=yes force=yes
+
+# tomcat and apache2
+- name: Install apache2
+  apt: pkg={{ item }} state=latest update-cache=yes force=yes
+  with_items:
+    - apache2
+    - tomcat7
+
+- lineinfile: dest=/etc/default/tomcat7 line="JAVA_HOME=/usr/lib/jvm/java-7-oracle"
+
+# enable tomcat remote debug
+- file: path=/var/lib/tomcat7/bin state=directory
+- copy: src=setenv.sh dest=/var/lib/tomcat7/bin/setenv.sh
+# TODO: ansiblize this
+- shell: sed -i 's/\\\"\$CATALINA_SH\\\" \$\@\"/\"$CATALINA_SH\" jpda $@\"/g' /etc/init.d/tomcat7
+
+- name: Enables Apache2 modules
+  apache2_module: state=present name={{ item }}
+  with_items:
+    - headers
+    - rewrite
+
+- apt: name=libapache2-mod-jk state=present
+
+# TODO: ansiblize this
+- shell: sed -i '{:a;N;$!ba;s/<\!--\n    <Connector port=\"8009\" protocol=\"AJP\/1.3\" redirectPort=\"8443\" \/>\n    -->/<Connector port=\"8009\" protocol=\"AJP\/1\.3\" redirectPort=\"8443\" \/>/g;t a}' /etc/tomcat7/server.xml
+
+- copy: src=workers.properties dest=/etc/libapache2-mod-jk/workers.properties
+
+- template: src=todo-server.conf.j2 dest=/etc/apache2/sites-available/todo-server.conf
+
+- command: a2dissite 000-default
+- command: a2ensite todo-server
+
+# TODO: change to started and use notify
+- service: name=tomcat7 state=restarted enabled=yes
+- service: name=apache2 state=restarted enabled=yes

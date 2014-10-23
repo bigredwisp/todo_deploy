@@ -1,0 +1,14 @@
+---
+# master playbook for complete deployment
+
+- hosts: all
+  roles:
+    - common
+
+- hosts: webserver
+  roles:
+    - todo
+
+- hosts: dbserver
+  roles:
+    - mongodb

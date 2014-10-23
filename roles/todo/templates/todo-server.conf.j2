@@ -1,0 +1,28 @@
+<VirtualHost *:{{ todo_port }}>
+  JkMount /todo/* ajp13_worker
+
+  Header always set Access-Control-Allow-Origin "*"                   
+  Header always set Access-Control-Allow-Methods "POST, GET, PUT, DELETE, OPTIONS"
+  Header always set Access-Control-Allow-Headers "Authorization"
+  
+  RewriteEngine On                  
+  RewriteCond %{REQUEST_METHOD} OPTIONS
+  RewriteRule ^(.*)$ $1 [R=200,L]
+  
+  DocumentRoot /var/www/todo-webapp
+
+  <Directory /var/www/todo-webapp/>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+  </Directory>
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+
+  # Possible values include: debug, info, notice, warn, error, crit,
+  # alert, emerg.
+  LogLevel warn
+
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>

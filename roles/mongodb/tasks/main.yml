@@ -1,0 +1,8 @@
+---
+- apt_key: keyserver=keyserver.ubuntu.com id=7F0CEB10
+- apt_repository: repo='deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' update_cache=yes
+
+- apt: name=mongodb-org state=present
+- apt: name=mongodb-clients state=present
+
+- copy: src=mongorc.js dest=/etc/mongorc.js
