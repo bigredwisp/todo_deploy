@@ -4,4 +4,6 @@
 
 - apt: name=mongodb-org state=present
 
+- template: src=mongod.conf.j2 dest=/etc/mongod.conf
+
 - copy: src=mongorc.js dest=/etc/mongorc.js
