@@ -7,3 +7,5 @@
 - template: src=mongod.conf.j2 dest=/etc/mongod.conf
 
 - copy: src=mongorc.js dest=/etc/mongorc.js
+
+- service: name=mongod state=restarted enabled=yes

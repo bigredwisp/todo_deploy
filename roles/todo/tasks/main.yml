@@ -43,6 +43,10 @@
 - command: a2dissite 000-default
 - command: a2ensite todo-server
 
+# Temporary hack to symlink to war file in local build dir
+- shell: rm -rf /var/lib/tomcat7/webapps/ROOT
+- shell: ln -sf /home/vagrant/todo_server/todo-server-0.0.1.war /var/lib/tomcat7/webapps/todo.war
+
 # TODO: change to started and use notify
 - service: name=tomcat7 state=restarted enabled=yes
 - service: name=apache2 state=restarted enabled=yes
