@@ -5,10 +5,10 @@
   roles:
     - common
 
-- hosts: webserver
-  roles:
-    - todo
-
 - hosts: dbserver
   roles:
     - mongodb
+
+- hosts: webserver
+  roles:
+    - todo

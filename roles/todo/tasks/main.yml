@@ -2,13 +2,13 @@
 
 # install Java
 - name: Add JRE ppa
-  apt_repository: repo=ppa:webupd8team/java state=present
+  apt_repository: repo='ppa:webupd8team/java' state=present
 
 - name: Automatically select the Oracle License
-  shell: echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
 - name: Install JRE
-  apt: pkg=oracle-java7-installer state=latest update-cache=yes force=yes
+  apt: pkg=oracle-java8-installer state=latest update-cache=yes force=yes
 
 # tomcat and apache2
 - name: Install apache2
@@ -17,7 +17,7 @@
     - apache2
     - tomcat7
 
-- lineinfile: dest=/etc/default/tomcat7 line="JAVA_HOME=/usr/lib/jvm/java-7-oracle"
+- lineinfile: dest=/etc/default/tomcat7 line="JAVA_HOME=/usr/lib/jvm/java-8-oracle"
 
 # enable tomcat remote debug
 - file: path=/var/lib/tomcat7/bin state=directory
