@@ -1,3 +1,3 @@
 #!/bin/sh
 
-CATALINA_OPTS="-Ddebug"
+export JPDA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"

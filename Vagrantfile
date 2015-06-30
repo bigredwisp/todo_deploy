@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  # Add vagrant box hostname to hosts file
+  # Configure local DNS for vagrant boxes
   config.vm.provision "hosts" do |provisioner|
     provisioner.add_host "10.20.1.2", ["todo-api"]
     provisioner.add_host "10.20.1.3", ["todo-db"]
