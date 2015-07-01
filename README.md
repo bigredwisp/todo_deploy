@@ -5,7 +5,7 @@
 - Vagrant
 - Following Vagrant plugs:
 
-        vagrant plugin install vagrant-hosts
+        vagrant plugin install vagrant-hosts vagrant-hostmanager
 
 - Ansible
 

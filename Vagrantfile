@@ -6,6 +6,9 @@ VAGRANTFILE_API_VERSION = "2"
 
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+
   config.vm.box = "ubuntu/trusty64"
 
   # Setup db server first, so API servlet can connect to DB and initialize correctly
@@ -31,18 +34,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.sudo = true
-    ansible.playbook = "master.yml"
+    ansible.playbook = "todo_backend.yml"
     ansible.groups = {
         "webserver" => ["api"],
         "dbserver" => ["db"]
     }
   end
-
-#  config.vm.define "webapp" do |webapp|
-#    webapp.vm.hostname = "todo-webapp"
-#    if FileTest::directory?("../../js/js_todo_app/dist")
-#      web.vm.synced_folder "../../js/js_todo_app/dist/", "/home/vagrant/todo_webapp/"
-#    end
-#  end
-
 end
